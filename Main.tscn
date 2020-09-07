@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Generator.gd" type="Script" id=1]
+[ext_resource path="res://Drawer.gd" type="Script" id=2]
+[ext_resource path="res://PlayerSpawner.gd" type="Script" id=3]
+
+[node name="Main" type="Node2D"]
+
+[node name="Generator" type="Node2D" parent="."]
+script = ExtResource( 1 )
+multiplier = 8
+size = 120
+death_limit = 3
+birth_limit = 5
+chance_alive = 0.45
+
+[node name="Drawer" type="Node2D" parent="Generator"]
+script = ExtResource( 2 )
+
+[node name="PlayerSpawner" type="Node2D" parent="Generator"]
+script = ExtResource( 3 )
+[connection signal="on_map_updated" from="Generator/Drawer" to="Generator/Drawer" method="_on_Drawer_on_map_updated"]

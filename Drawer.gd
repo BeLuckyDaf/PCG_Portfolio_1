@@ -1,0 +1,43 @@
+class_name Drawer
+extends Node2D
+
+
+var map = []
+var mul = 8
+
+onready var block := preload("res://Block.tscn")
+
+signal on_map_updated()
+
+func _ready():
+	OS.window_resizable = false
+
+func set_map(value, multiplier):
+	map = value
+	mul = multiplier
+	emit_signal("on_map_updated")
+
+func _draw():
+	var size = map.size()*mul
+	if size > 0:
+		OS.window_size = Vector2(size, size)
+
+func _on_Drawer_on_map_updated():
+	update()
+	_put_blocks()
+
+func _put_blocks():
+	var map_node = get_tree().root.get_node_or_null("Map")
+	if map_node == null:
+		map_node = Node2D.new()
+		map_node.name = "Map"
+		get_tree().root.call_deferred("add_child", map_node)
+	else:
+		for child in map_node.get_children():
+			child.call_deferred("queue_free")
+	for y in range(map.size()):
+		for x in range(map[y].size()):
+			if map[y][x] == 1:
+				var instance = block.instance()
+				instance.position = Vector2(mul/2, mul/2) + Vector2(x, y)*mul
+				map_node.add_child(instance)
