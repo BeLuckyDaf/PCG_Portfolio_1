@@ -53,6 +53,10 @@ window/size/width=640
 window/size/height=640
 window/stretch/aspect="keep"
 
+[global]
+
+vsync=true
+
 [input]
 
 click={

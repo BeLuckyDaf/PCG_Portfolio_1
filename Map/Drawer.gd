@@ -27,7 +27,7 @@ func _on_Drawer_on_map_updated():
 	_put_blocks()
 
 func _put_blocks():
-	var map_node = get_tree().root.get_node_or_null("Map")
+	var map_node = self # get_tree().root.get_node_or_null("Map")
 	if map_node == null:
 		map_node = Node2D.new()
 		map_node.name = "Map"

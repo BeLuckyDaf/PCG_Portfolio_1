@@ -1,9 +1,14 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Map/Generator.gd" type="Script" id=1]
 [ext_resource path="res://Map/Drawer.gd" type="Script" id=2]
 [ext_resource path="res://Map/PlayerSpawner.gd" type="Script" id=3]
 [ext_resource path="res://Main.gd" type="Script" id=4]
+[ext_resource path="res://Assets/Fonts/PantonDemoBlack.otf" type="DynamicFontData" id=5]
+
+[sub_resource type="DynamicFont" id=1]
+size = 54
+font_data = ExtResource( 5 )
 
 [node name="Main" type="Node2D"]
 script = ExtResource( 4 )
@@ -21,4 +26,28 @@ script = ExtResource( 2 )
 
 [node name="PlayerSpawner" type="Node2D" parent="Generator"]
 script = ExtResource( 3 )
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = 640.0
+margin_bottom = 640.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="CenterContainer"]
+margin_left = 152.0
+margin_top = 286.0
+margin_right = 488.0
+margin_bottom = 354.0
+custom_fonts/font = SubResource( 1 )
+text = "GENERATING"
+align = 1
+valign = 1
+uppercase = true
+
+[node name="ReloadTimer" type="Timer" parent="."]
 [connection signal="on_map_updated" from="Generator/Drawer" to="Generator/Drawer" method="_on_Drawer_on_map_updated"]
+[connection signal="timeout" from="ReloadTimer" to="." method="_on_Timer_timeout"]
