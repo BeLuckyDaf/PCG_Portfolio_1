@@ -10,6 +10,7 @@ export var map_height : int = 120
 export var death_limit : int = 3
 export var birth_limit : int = 5
 export var chance_alive : float = 0.45
+export var after_mirror_sims : int = 2
 
 func _ready():
 	make_map()
@@ -17,9 +18,9 @@ func _ready():
 func make_map():
 	var map = generate_map(map_width, map_height, iterations)
 	_mirror_map(map)
-	map = _simulate(map)
+	_simulate_times(map, after_mirror_sims)
 	_mirror_map(map, true)
-	map = _simulate(map)
+	_simulate_times(map, after_mirror_sims)
 	drawer.set_map(map, multiplier)
 
 func _generate_random_map(w, h):
@@ -45,6 +46,10 @@ func _get_map_point(map, y, x, w, h):
 	if x < 0 or x > w-1 or y < 0 or y > h-1:
 		return 1
 	return map[y][x]
+
+func _simulate_times(map, n):
+	for i in range(n):
+		map = _simulate(map)
 
 func _simulate(map):
 	var newmap = map.duplicate()
