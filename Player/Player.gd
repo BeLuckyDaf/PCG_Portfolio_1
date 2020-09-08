@@ -8,7 +8,7 @@ onready var bullet = preload("res://Player/Bullet.tscn")
 
 export var speed : float = 100
 export var player_id : int = 0
-export var reload_time : float = 0.1
+export var reload_time : float = 0.15
 
 var move_up_str = "p_mup"
 var move_down_str = "p_mdown"

@@ -19,9 +19,10 @@ func set_map(value, multiplier):
 	emit_signal("on_map_updated", value)
 
 func _draw():
-	var size = map.size()*mul
-	if size > 0:
-		OS.window_size = Vector2(size, size)
+	var sizey = map.size()*mul
+	if sizey > 0:
+		var sizex = map[0].size()*mul
+		OS.window_size = Vector2(sizex, sizey)
 
 func _on_Drawer_on_map_updated(new_map):
 	update()

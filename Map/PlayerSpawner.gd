@@ -34,11 +34,11 @@ func find_free_position():
 	if map.size() == 0:
 		return Vector2.ZERO
 	randomize()
-	var x = round(rand_range(0, map.size()))
-	var y = round(rand_range(0, map[0].size()))
+	var y = round(rand_range(0, map.size()-1))
+	var x = round(rand_range(0, map[0].size()-1))
 	while map[y][x] != 0:
-		x = round(rand_range(0, map.size()))
-		y = round(rand_range(0, map[0].size()))
+		y = round(rand_range(0, map.size()-1))
+		x = round(rand_range(0, map[0].size()-1))
 	return Vector2(x, y)*mul
 
 func remove_alive(player_id):
