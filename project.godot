@@ -51,6 +51,7 @@ run/main_scene="res://Main.tscn"
 
 window/size/width=640
 window/size/height=640
+window/vsync/use_vsync=false
 window/stretch/aspect="keep"
 
 [global]
