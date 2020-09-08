@@ -27,5 +27,5 @@ func _input(event):
 		player_instance.connect("on_player_died", self, "remove_alive")
 		add_child(player_instance)
 
-func remove_alive(id):
-	alive[id] = false
+func remove_alive(player_id):
+	alive[player_id] = false

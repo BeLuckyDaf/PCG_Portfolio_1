@@ -12,6 +12,7 @@ func _ready():
 func _draw():
 	draw_rect(Rect2(-size/2, size), Color.black)
 
+# warning-ignore:unused_argument
 func _process(delta):
 	update()
 	

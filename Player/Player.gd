@@ -89,6 +89,7 @@ func shoot():
 		timer.start(reload_time)
 
 func _process(delta):
+# warning-ignore:return_value_discarded
 	move_and_collide(move * delta * speed)
 	shoot()
 	update()

@@ -21,11 +21,12 @@ func make_map():
 	map = _simulate(map)
 	drawer.set_map(map, multiplier)
 
-func _generate_random_map(size):
+func _generate_random_map(map_size):
 	var map = []
-	for y in range(size):
+	for y in range(map_size):
 		map.append([])
-		for x in range(size):
+# warning-ignore:unused_variable
+		for x in range(map_size):
 			map[y].append(1 if rand_range(0, 1) < chance_alive else 0)
 	return map
 
@@ -39,8 +40,8 @@ func _mirror_map(map, vertical=false):
 			for x in range(int(map[y].size()/2)):
 				map[y][map[y].size()-x-1] = map[y][x]
 
-func _get_map_point(map, y, x, size):
-	if x < 0 or x > size-1 or y < 0 or y > size-1:
+func _get_map_point(map, y, x, map_size):
+	if x < 0 or x > map_size-1 or y < 0 or y > map_size-1:
 		return 1
 	return map[y][x]
 
@@ -59,10 +60,11 @@ func _simulate(map):
 			newmap[y][x] = _apply_rules(map[y][x], l, r, t, b, tr, tl, br, bl)
 	return newmap
 
-func generate_map(size, iterations):
+func generate_map(map_size, n):
 	randomize()
-	var map = _generate_random_map(size)
-	for i in range(iterations):
+	var map = _generate_random_map(map_size)
+# warning-ignore:unused_variable
+	for i in range(n):
 		map = _simulate(map)
 	return map
 
