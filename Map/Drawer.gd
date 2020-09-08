@@ -7,7 +7,8 @@ var mul = 8
 
 onready var block := preload("res://Blocks/Block.tscn")
 
-signal on_map_updated()
+signal on_map_updated(new_map)
+signal on_map_drawn(multiplier)
 
 func _ready():
 	OS.window_resizable = false
@@ -15,16 +16,17 @@ func _ready():
 func set_map(value, multiplier):
 	map = value
 	mul = multiplier
-	emit_signal("on_map_updated")
+	emit_signal("on_map_updated", value)
 
 func _draw():
 	var size = map.size()*mul
 	if size > 0:
 		OS.window_size = Vector2(size, size)
 
-func _on_Drawer_on_map_updated():
+func _on_Drawer_on_map_updated(new_map):
 	update()
 	_put_blocks()
+	emit_signal("on_map_drawn", mul)
 
 func _put_blocks():
 	var map_node = self # get_tree().root.get_node_or_null("Map")

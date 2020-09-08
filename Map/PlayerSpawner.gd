@@ -2,30 +2,50 @@ extends Node2D
 
 onready var player = preload("res://Player/Player.tscn")
 
-export var id : int = 0
-export var max_players : int = 2
-
 var players_positions : Array = []
 var alive : Array = []
+var map : Array = []
+var mul = 1
 
 func _input(event):
-	if event.is_action_pressed("click") and id < max_players:
-		var player_instance = player.instance()
-		players_positions.append(get_global_mouse_position())
-		alive.append(true)
-		player_instance.position = players_positions[id]
-		player_instance.initialize_group(id)
-		add_child(player_instance)
-		player_instance.connect("on_player_died", self, "remove_alive")
-		id += 1
-	
-	if alive.size() > event.device and event.is_action_pressed("respawn") and not alive[event.device]:
-		alive[event.device] = true
-		var player_instance = player.instance()
-		player_instance.position = players_positions[event.device]
-		player_instance.initialize_group(event.device)
-		player_instance.connect("on_player_died", self, "remove_alive")
-		add_child(player_instance)
+	if event.is_action_pressed("respawn"):
+		while alive.size() <= event.device:
+			alive.append(false)
+		while players_positions.size() <= event.device:
+			var free_position = find_free_position()
+			var map_end = find_map_end()
+			var mirrored_position = map_end - free_position
+			players_positions.append(free_position)
+			players_positions.append(mirrored_position)
+		if not alive[event.device]:
+			alive[event.device] = true
+			var player_instance = player.instance()
+			player_instance.position = players_positions[event.device]
+			player_instance.initialize_group(event.device)
+			player_instance.connect("on_player_died", self, "remove_alive")
+			add_child(player_instance)
+
+func find_map_end():
+	if map.size() == 0:
+		return Vector2.ZERO
+	return Vector2(map.size(), map[0].size())*mul
+
+func find_free_position():
+	if map.size() == 0:
+		return Vector2.ZERO
+	randomize()
+	var x = round(rand_range(0, map.size()))
+	var y = round(rand_range(0, map[0].size()))
+	while map[y][x] != 0:
+		x = round(rand_range(0, map.size()))
+		y = round(rand_range(0, map[0].size()))
+	return Vector2(x, y)*mul
 
 func remove_alive(player_id):
 	alive[player_id] = false
+
+func _on_Drawer_on_map_updated(new_map):
+	map = new_map
+
+func _on_Drawer_on_map_drawn(multiplier):
+	mul = multiplier

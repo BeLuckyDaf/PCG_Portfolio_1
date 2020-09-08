@@ -15,5 +15,5 @@ func _draw():
 func destroy():
 	var instance = explosion.instance()
 	instance.position = position
-	get_tree().root.add_child(instance)
+	get_parent().add_child(instance)
 	queue_free()

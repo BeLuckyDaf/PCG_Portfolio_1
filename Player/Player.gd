@@ -26,13 +26,18 @@ var look : Vector2
 var can_shoot : bool = true
 var shooting : bool = false
 
+var color : Color = Color.green
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	randomize()
+	color = Color(rand_range(0, 1), rand_range(0, 1), rand_range(0, 1))
 	move = Vector2.ZERO
 	add_to_group("Destroyable")
 
 func _draw():
-	draw_circle(Vector2.ZERO, 4, Color.green)
+	draw_circle(Vector2.ZERO, 5, Color.black)
+	draw_circle(Vector2.ZERO, 4, color)
 	draw_line(Vector2.ZERO, look.normalized()*10, Color.orange, 2)
 
 func _input(event):
@@ -79,7 +84,7 @@ func spawn_bullet(direction):
 	var instance = bullet.instance()
 	instance.position = position + direction * 8
 	instance.group = "Player_%d" % player_id
-	get_tree().root.add_child(instance)
+	get_parent().add_child(instance)
 	instance.launch(direction)
 
 func shoot():
