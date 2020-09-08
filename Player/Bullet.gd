@@ -21,6 +21,9 @@ func _process(delta):
 		var collision = move_and_collide(direction.normalized() * delta * speed)
 		if collision is KinematicCollision2D and collision.collider is Node:
 			if not collision.collider.is_in_group(group):
-				collision.collider.call_deferred("queue_free")
+				if collision.collider is Block:
+					(collision.collider as Block).destroy()
+				else:
+					collision.collider.call_deferred("queue_free")
 			queue_free()
 	update()

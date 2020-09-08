@@ -1,8 +1,8 @@
 [gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://Block.gd" type="Script" id=1]
+[ext_resource path="res://Blocks/Block.gd" type="Script" id=1]
 
-[sub_resource type="RectangleShape2D" id=3]
+[sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 4, 4 )
 
 [node name="Block" type="StaticBody2D"]
@@ -10,4 +10,4 @@ script = ExtResource( 1 )
 size = Vector2( 8, 8 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource( 3 )
+shape = SubResource( 1 )

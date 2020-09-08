@@ -1,9 +1,7 @@
+class_name Block
 extends StaticBody2D
 
-
-# Declare member variables here. Examples:
-# var a = 2
-# var b = "text"
+onready var explosion = preload("res://Particles/Explosion.tscn")
 
 export var size : Vector2 = Vector2.ONE
 
@@ -16,3 +14,9 @@ func _draw():
 
 func _process(delta):
 	update()
+	
+func destroy():
+	var instance = explosion.instance()
+	instance.position = position
+	get_tree().root.add_child(instance)
+	queue_free()

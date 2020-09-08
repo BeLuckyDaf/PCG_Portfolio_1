@@ -5,7 +5,7 @@ extends Node2D
 var map = []
 var mul = 8
 
-onready var block := preload("res://Block.tscn")
+onready var block := preload("res://Blocks/Block.tscn")
 
 signal on_map_updated()
 
