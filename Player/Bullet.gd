@@ -1,7 +1,7 @@
 class_name Bullet
 extends KinematicBody2D
 
-export var speed : float = 5.0
+export var speed : float = 500
 
 var direction : Vector2
 var group := "Player_1"
@@ -21,8 +21,8 @@ func _process(delta):
 		var collision = move_and_collide(direction.normalized() * delta * speed)
 		if collision is KinematicCollision2D and collision.collider is Node:
 			if not collision.collider.is_in_group(group):
-				if collision.collider is Block:
-					(collision.collider as Block).destroy()
+				if collision.collider.is_in_group("Destroyable"):
+					collision.collider.destroy()
 				else:
 					collision.collider.call_deferred("queue_free")
 			queue_free()

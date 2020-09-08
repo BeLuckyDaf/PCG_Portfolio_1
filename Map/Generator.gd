@@ -1,9 +1,7 @@
 class_name Generator
 extends Node2D
 
-
 onready var drawer := $Drawer
-
 
 export var multiplier : int = 10
 export var iterations : int = 15

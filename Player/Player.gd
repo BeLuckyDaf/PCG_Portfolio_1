@@ -1,8 +1,10 @@
 class_name Player
 extends KinematicBody2D
 
-onready var bullet = preload("res://Player/Bullet.tscn")
+signal on_player_died(id)
+
 onready var timer := $Timer
+onready var bullet = preload("res://Player/Bullet.tscn")
 
 export var speed : float = 100
 export var player_id : int = 0
@@ -27,6 +29,7 @@ var shooting : bool = false
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	move = Vector2.ZERO
+	add_to_group("Destroyable")
 
 func _draw():
 	draw_circle(Vector2.ZERO, 4, Color.green)
@@ -89,6 +92,10 @@ func _process(delta):
 	move_and_collide(move * delta * speed)
 	shoot()
 	update()
+
+func destroy():
+	emit_signal("on_player_died", player_id)
+	queue_free()
 
 func _on_Timer_timeout():
 	can_shoot = true
