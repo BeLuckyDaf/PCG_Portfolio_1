@@ -5,12 +5,12 @@
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 1, 1 )
 
-[sub_resource type="Gradient" id=5]
+[sub_resource type="Gradient" id=2]
 offsets = PoolRealArray( 0, 0.619718 )
 colors = PoolColorArray( 0.956863, 0.670588, 0.337255, 0.733333, 1, 1, 1, 0 )
 
-[sub_resource type="GradientTexture" id=6]
-gradient = SubResource( 5 )
+[sub_resource type="GradientTexture" id=3]
+gradient = SubResource( 2 )
 
 [sub_resource type="ParticlesMaterial" id=4]
 emission_shape = 1
@@ -23,7 +23,7 @@ orbit_velocity = 0.0
 orbit_velocity_random = 0.0
 scale = 3.0
 scale_random = 0.5
-color_ramp = SubResource( 6 )
+color_ramp = SubResource( 3 )
 
 [node name="Bullet" type="KinematicBody2D"]
 script = ExtResource( 1 )
@@ -36,3 +36,6 @@ amount = 100
 lifetime = 0.25
 local_coords = false
 process_material = SubResource( 4 )
+
+[node name="VisibilityNotifier2D" type="VisibilityNotifier2D" parent="."]
+[connection signal="screen_exited" from="VisibilityNotifier2D" to="." method="_on_VisibilityNotifier2D_screen_exited"]

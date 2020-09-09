@@ -16,12 +16,16 @@ func _ready():
 	make_map()
 
 func make_map():
+	var st = OS.get_ticks_msec()
 	var map = generate_map(map_width, map_height, iterations)
 	_mirror_map(map)
 	_simulate_times(map, after_mirror_sims)
 	_mirror_map(map, true)
 	_simulate_times(map, after_mirror_sims)
+	print("Map generated for %.3fs" % ((OS.get_ticks_msec() - st) / 1000.0))
+	st = OS.get_ticks_msec()
 	drawer.set_map(map, multiplier)
+	print("Drawing complete for %.3fs" % ((OS.get_ticks_msec() - st) / 1000.0))
 
 func _generate_random_map(w, h):
 	var map = []

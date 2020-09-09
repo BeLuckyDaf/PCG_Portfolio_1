@@ -18,16 +18,15 @@ func set_map(value, multiplier):
 	mul = multiplier
 	emit_signal("on_map_updated", value)
 
-func _draw():
-	var sizey = map.size()*mul
-	if sizey > 0:
-		var sizex = map[0].size()*mul
-		OS.window_size = Vector2(sizex, sizey)
-
 func _on_Drawer_on_map_updated(new_map):
 	update()
+	_remove_blocks()
 	_put_blocks()
 	emit_signal("on_map_drawn", mul)
+
+func _remove_blocks():
+	for child in get_children():
+		child.queue_free()
 
 func _put_blocks():
 	var map_node = self # get_tree().root.get_node_or_null("Map")
@@ -42,5 +41,14 @@ func _put_blocks():
 		for x in range(map[y].size()):
 			if map[y][x] == 1:
 				var instance = block.instance()
+				instance.size = Vector2(mul, mul)
 				instance.position = Vector2(mul/2, mul/2) + Vector2(x, y)*mul
 				map_node.add_child(instance)
+
+
+func _on_Drawer_on_map_drawn(multiplier):
+	var sizey = map.size()*mul
+	if sizey > 0:
+		var sizex = map[0].size()*mul
+		OS.window_size = Vector2(sizex, sizey)
+		OS.center_window()

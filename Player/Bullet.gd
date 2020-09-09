@@ -27,3 +27,7 @@ func _process(delta):
 					collision.collider.call_deferred("queue_free")
 			queue_free()
 	update()
+
+
+func _on_VisibilityNotifier2D_screen_exited():
+	queue_free()
