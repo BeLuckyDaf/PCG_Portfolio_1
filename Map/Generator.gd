@@ -17,71 +17,14 @@ func _ready():
 
 func make_map():
 	var st = OS.get_ticks_msec()
-	var map = generate_map(map_width, map_height, iterations)
-	_mirror_map(map)
-	_simulate_times(map, after_mirror_sims)
-	_mirror_map(map, true)
-	_simulate_times(map, after_mirror_sims)
+	var arenagen = ArenaGenerator.new()
+	arenagen.set_thresholds(5, 3)
+	var map := Map.new()
+	map.plain = arenagen.generate(map_width, map_height, iterations, chance_alive * 100, after_mirror_sims)
+	map.width = map_width
+	map.height = map_height
 	print("Map generated for %.3fs" % ((OS.get_ticks_msec() - st) / 1000.0))
+	
 	st = OS.get_ticks_msec()
 	drawer.set_map(map, multiplier)
 	print("Drawing complete for %.3fs" % ((OS.get_ticks_msec() - st) / 1000.0))
-
-func _generate_random_map(w, h):
-	var map = []
-	for y in range(h):
-		map.append([])
-# warning-ignore:unused_variable
-		for x in range(w):
-			map[y].append(1 if rand_range(0, 1) < chance_alive else 0)
-	return map
-
-func _mirror_map(map, vertical=false):
-	if vertical:
-		for y in range(int(map.size()/2)):
-			for x in range(int(map[y].size())):
-				map[map.size()-y-1][x] = map[y][x]
-	else:
-		for y in range(map.size()):
-			for x in range(int(map[y].size()/2)):
-				map[y][map[y].size()-x-1] = map[y][x]
-
-func _get_map_point(map, y, x, w, h):
-	if x < 0 or x > w-1 or y < 0 or y > h-1:
-		return 1
-	return map[y][x]
-
-func _simulate_times(map, n):
-	for i in range(n):
-		map = _simulate(map)
-
-func _simulate(map):
-	var newmap = map.duplicate()
-	for y in range(map.size()):
-		for x in range(map[y].size()):
-			var l = _get_map_point(map, y, x-1, map_width, map_height)
-			var r = _get_map_point(map, y, x+1, map_width, map_height)
-			var tr = _get_map_point(map, y+1, x+1, map_width, map_height)
-			var tl = _get_map_point(map, y+1, x-1, map_width, map_height)
-			var br = _get_map_point(map, y-1, x+1, map_width, map_height)
-			var bl = _get_map_point(map, y-1, x-1, map_width, map_height)
-			var t = _get_map_point(map, y-1, x, map_width, map_height)
-			var b = _get_map_point(map, y+1, x, map_width, map_height)
-			newmap[y][x] = _apply_rules(map[y][x], l, r, t, b, tr, tl, br, bl)
-	return newmap
-
-func generate_map(w, h, n):
-	randomize()
-	var map = _generate_random_map(w, h)
-# warning-ignore:unused_variable
-	for i in range(n):
-		map = _simulate(map)
-	return map
-
-
-func _apply_rules(cell, l, r, t, b, tr, tl, br, bl):
-	if cell == 1 and l + r + t + b + tr + tl + br + bl <= death_limit:
-		cell = 0
-	elif cell == 0 and l + r + t + b + tr + tl + br + bl >= birth_limit:
-		cell = 1
-	return cell

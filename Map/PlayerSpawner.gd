@@ -4,7 +4,7 @@ onready var player = preload("res://Player/Player.tscn")
 
 var players_positions : Array = []
 var alive : Array = []
-var map : Array = []
+var map : Map
 var mul = 1
 
 func _input(event):
@@ -17,6 +17,9 @@ func _input(event):
 			var mirrored_position = map_end - free_position
 			players_positions.append(free_position)
 			players_positions.append(mirrored_position)
+			print(free_position)
+			print(mirrored_position)
+			print(map_end)
 		if not alive[event.device]:
 			alive[event.device] = true
 			var player_instance = player.instance()
@@ -26,19 +29,19 @@ func _input(event):
 			add_child(player_instance)
 
 func find_map_end():
-	if map.size() == 0:
+	if map.width == 0 or map.height == 0:
 		return Vector2.ZERO
-	return Vector2(map.size(), map[0].size())*mul
+	return Vector2(map.width-1, map.height-1)*mul
 
 func find_free_position():
-	if map.size() == 0:
+	if map.width == 0 or map.height == 0:
 		return Vector2.ZERO
 	randomize()
-	var y = round(rand_range(0, map.size()-1))
-	var x = round(rand_range(0, map[0].size()-1))
-	while map[y][x] != 0:
-		y = round(rand_range(0, map.size()-1))
-		x = round(rand_range(0, map[0].size()-1))
+	var y = round(rand_range(0, map.height-1))
+	var x = round(rand_range(0, map.width-1))
+	while map.plain[y * map.width + x] != 0:
+		y = round(rand_range(0, map.height-1))
+		x = round(rand_range(0, map.width-1))
 	return Vector2(x, y)*mul
 
 func remove_alive(player_id):

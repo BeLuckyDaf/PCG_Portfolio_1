@@ -36,8 +36,8 @@ func _ready():
 	add_to_group("Destroyable")
 
 func _draw():
-	draw_circle(Vector2.ZERO, 5, Color.black)
-	draw_circle(Vector2.ZERO, 4, color)
+	draw_circle(Vector2.ZERO, 8, Color.black)
+	draw_circle(Vector2.ZERO, 6, color)
 	draw_line(Vector2.ZERO, look.normalized()*10, Color.orange, 2)
 
 func _input(event):
@@ -77,6 +77,7 @@ func _input(event):
 		shooting = false
 
 func initialize_group(id):
+	print("Initialized ID: %d" % id)
 	player_id = id
 	add_to_group("Player_%d" % player_id)
 

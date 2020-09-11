@@ -16,8 +16,11 @@ script = ExtResource( 4 )
 [node name="Generator" type="Node2D" parent="."]
 script = ExtResource( 1 )
 multiplier = 5
+iterations = 50
 map_width = 300
 map_height = 200
+chance_alive = 0.43
+after_mirror_sims = 50
 
 [node name="Drawer" type="Node2D" parent="Generator"]
 script = ExtResource( 2 )

@@ -2,7 +2,7 @@ class_name Drawer
 extends Node2D
 
 
-var map = []
+var map : Map
 var mul = 8
 
 onready var block := preload("res://Blocks/Block.tscn")
@@ -37,9 +37,9 @@ func _put_blocks():
 	else:
 		for child in map_node.get_children():
 			child.call_deferred("queue_free")
-	for y in range(map.size()):
-		for x in range(map[y].size()):
-			if map[y][x] == 1:
+	for y in range(map.height):
+		for x in range(map.width):
+			if map.plain[y * map.width + x] == 1:
 				var instance = block.instance()
 				instance.size = Vector2(mul, mul)
 				instance.position = Vector2(mul/2, mul/2) + Vector2(x, y)*mul
@@ -47,8 +47,8 @@ func _put_blocks():
 
 
 func _on_Drawer_on_map_drawn(multiplier):
-	var sizey = map.size()*mul
+	var sizey = map.height*mul
 	if sizey > 0:
-		var sizex = map[0].size()*mul
+		var sizex = map.width*mul
 		OS.window_size = Vector2(sizex, sizey)
 		OS.center_window()
