@@ -29,12 +29,12 @@ func _input(event):
 			add_child(player_instance)
 
 func find_map_end():
-	if map.width == 0 or map.height == 0:
+	if map == null or map.width == 0 or map.height == 0:
 		return Vector2.ZERO
 	return Vector2(map.width-1, map.height-1)*mul
 
 func find_free_position():
-	if map.width == 0 or map.height == 0:
+	if map == null or map.width == 0 or map.height == 0:
 		return Vector2.ZERO
 	randomize()
 	var y = round(rand_range(0, map.height-1))

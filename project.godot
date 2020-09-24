@@ -38,6 +38,16 @@ _global_script_classes=[ {
 "class": "Player",
 "language": "GDScript",
 "path": "res://Player/Player.gd"
+}, {
+"base": "Reference",
+"class": "QuadTree",
+"language": "GDScript",
+"path": "res://QuadTree/quadtree.gd"
+}, {
+"base": "Reference",
+"class": "QuadTreeNode",
+"language": "GDScript",
+"path": "res://QuadTree/quadtree_node.gd"
 } ]
 _global_script_class_icons={
 "Block": "",
@@ -45,7 +55,9 @@ _global_script_class_icons={
 "Drawer": "",
 "Generator": "",
 "Map": "",
-"Player": ""
+"Player": "",
+"QuadTree": "",
+"QuadTreeNode": ""
 }
 
 [application]
@@ -55,10 +67,9 @@ run/main_scene="res://Main.tscn"
 
 [display]
 
-window/size/width=640
-window/size/height=640
+window/size/width=1500
+window/size/height=1000
 window/vsync/use_vsync=false
-window/stretch/aspect="keep"
 
 [global]
 

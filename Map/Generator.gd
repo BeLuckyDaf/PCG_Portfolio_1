@@ -18,7 +18,7 @@ func _ready():
 func make_map():
 	var st = OS.get_ticks_msec()
 	var arenagen = ArenaGenerator.new()
-	arenagen.set_thresholds(5, 3)
+	arenagen.set_thresholds(birth_limit, death_limit)
 	var map := Map.new()
 	map.plain = arenagen.generate(map_width, map_height, iterations, chance_alive * 100, after_mirror_sims)
 	map.width = map_width

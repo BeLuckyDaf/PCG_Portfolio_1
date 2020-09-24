@@ -4,14 +4,41 @@ extends Node2D
 
 var map : Map
 var mul = 8
+var limit = 2
+
+var tree : QuadTree
 
 onready var block := preload("res://Blocks/Block.tscn")
 
 signal on_map_updated(new_map)
 signal on_map_drawn(multiplier)
 
-func _ready():
-	OS.window_resizable = false
+func fill_node(node: QuadTreeNode):
+	var count : int = 0
+	for y in node.bounds.size.y:
+		for x in node.bounds.size.x:
+			var actual_y = y + node.bounds.position.y
+			var actual_x = x + node.bounds.position.x
+			if map.plain[actual_y * map.width + actual_x] != 0:
+				count += 1
+	if count > limit and count < (node.bounds.size.y * node.bounds.size.x) - limit: # then split
+		node.child_nw = QuadTreeNode.new(node, Rect2(Vector2(node.bounds.position.x, node.bounds.position.y), node.bounds.size/2))
+		node.child_ne = QuadTreeNode.new(node, Rect2(Vector2(node.bounds.position.x + node.bounds.size.x/2, node.bounds.position.y), node.bounds.size/2))
+		node.child_sw = QuadTreeNode.new(node, Rect2(Vector2(node.bounds.position.x, node.bounds.position.y + node.bounds.size.y/2), node.bounds.size/2))
+		node.child_se = QuadTreeNode.new(node, Rect2(Vector2(node.bounds.position.x + node.bounds.size.x/2, node.bounds.position.y + node.bounds.size.y/2), node.bounds.size/2))
+		fill_node(node.child_nw)
+		fill_node(node.child_ne)
+		fill_node(node.child_sw)
+		fill_node(node.child_se)
+		node.state = -1
+	elif count < limit:
+		node.state = 0
+	else:
+		node.state = 1
+
+func generate_tree():
+	tree = QuadTree.new(Rect2(Vector2.ZERO, Vector2(map.width, map.height)))
+	fill_node(tree.root)
 
 func set_map(value, multiplier):
 	map = value
@@ -19,10 +46,26 @@ func set_map(value, multiplier):
 	emit_signal("on_map_updated", value)
 
 func _on_Drawer_on_map_updated(new_map):
+	generate_tree()
 	update()
-	_remove_blocks()
-	_put_blocks()
+	#_remove_blocks()
+	#_put_blocks()
 	emit_signal("on_map_drawn", mul)
+
+func _draw():
+	var stack = []
+	if tree != null:
+		stack.push_back(tree.root)
+		while stack.size() > 0:
+			var node = stack.pop_back()
+			if node.state == -1:
+				stack.push_back(node.child_nw)
+				stack.push_back(node.child_ne)
+				stack.push_back(node.child_sw)
+				stack.push_back(node.child_se)
+			elif node.state == 1:
+				draw_rect(Rect2(node.bounds.position * mul, node.bounds.size * mul), Color.black)
+			#draw_rect(Rect2(node.bounds.position * mul, node.bounds.size * mul), Color.crimson, false, 2)
 
 func _remove_blocks():
 	for child in get_children():
@@ -44,7 +87,6 @@ func _put_blocks():
 				instance.size = Vector2(mul, mul)
 				instance.position = Vector2(mul/2, mul/2) + Vector2(x, y)*mul
 				map_node.add_child(instance)
-
 
 func _on_Drawer_on_map_drawn(multiplier):
 	var sizey = map.height*mul
