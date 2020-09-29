@@ -22,10 +22,7 @@ func fill_node(node: QuadTreeNode):
 			if map.plain[actual_y * map.width + actual_x] != 0:
 				count += 1
 	if count > limit and count < (node.bounds.size.y * node.bounds.size.x) - limit: # then split
-		node.child_nw = QuadTreeNode.new(node, Rect2(Vector2(node.bounds.position.x, node.bounds.position.y), node.bounds.size/2))
-		node.child_ne = QuadTreeNode.new(node, Rect2(Vector2(node.bounds.position.x + node.bounds.size.x/2, node.bounds.position.y), node.bounds.size/2))
-		node.child_sw = QuadTreeNode.new(node, Rect2(Vector2(node.bounds.position.x, node.bounds.position.y + node.bounds.size.y/2), node.bounds.size/2))
-		node.child_se = QuadTreeNode.new(node, Rect2(Vector2(node.bounds.position.x + node.bounds.size.x/2, node.bounds.position.y + node.bounds.size.y/2), node.bounds.size/2))
+		node.split()
 		fill_node(node.child_nw)
 		fill_node(node.child_ne)
 		fill_node(node.child_sw)
@@ -87,6 +84,13 @@ func _put_blocks():
 				instance.size = Vector2(mul, mul)
 				instance.position = Vector2(mul/2, mul/2) + Vector2(x, y)*mul
 				map_node.add_child(instance)
+
+func _input(event):
+	if event.is_action_pressed("ui_accept"):
+		var x = round(rand_range(0, 255))
+		var y = round(rand_range(0, 255))
+		tree.insert_rect(Rect2(Vector2(x, y), Vector2.ONE*10), 1)
+		update()
 
 func _on_Drawer_on_map_drawn(multiplier):
 	var sizey = map.height*mul
