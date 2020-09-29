@@ -50,8 +50,8 @@ valign = 1
 uppercase = true
 
 [node name="ReloadTimer" type="Timer" parent="."]
-[connection signal="on_map_drawn" from="Generator/Drawer" to="Generator/PlayerSpawner" method="_on_Drawer_on_map_drawn"]
 [connection signal="on_map_drawn" from="Generator/Drawer" to="Generator/Drawer" method="_on_Drawer_on_map_drawn"]
-[connection signal="on_map_updated" from="Generator/Drawer" to="Generator/PlayerSpawner" method="_on_Drawer_on_map_updated"]
+[connection signal="on_map_drawn" from="Generator/Drawer" to="Generator/PlayerSpawner" method="_on_Drawer_on_map_drawn"]
 [connection signal="on_map_updated" from="Generator/Drawer" to="Generator/Drawer" method="_on_Drawer_on_map_updated"]
+[connection signal="on_map_updated" from="Generator/Drawer" to="Generator/PlayerSpawner" method="_on_Drawer_on_map_updated"]
 [connection signal="timeout" from="ReloadTimer" to="." method="_on_Timer_timeout"]

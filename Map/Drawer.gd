@@ -10,8 +10,6 @@ var tree : QuadTree
 var debug_draw_tree : bool = false
 var debug_mouse_draw : bool = false
 
-onready var block := preload("res://Blocks/Block.tscn")
-
 signal on_map_updated(new_map)
 signal on_map_drawn(multiplier)
 

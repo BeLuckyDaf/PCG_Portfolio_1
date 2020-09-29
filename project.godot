@@ -9,11 +9,6 @@
 config_version=4
 
 _global_script_classes=[ {
-"base": "StaticBody2D",
-"class": "Block",
-"language": "GDScript",
-"path": "res://Blocks/Block.gd"
-}, {
 "base": "KinematicBody2D",
 "class": "Bullet",
 "language": "GDScript",
@@ -50,7 +45,6 @@ _global_script_classes=[ {
 "path": "res://QuadTree/quadtree_node.gd"
 } ]
 _global_script_class_icons={
-"Block": "",
 "Bullet": "",
 "Drawer": "",
 "Generator": "",
