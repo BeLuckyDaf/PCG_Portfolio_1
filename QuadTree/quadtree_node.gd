@@ -38,37 +38,13 @@ func free_children():
 	if child_se != null:
 		child_se = null
 
-func overlaps(target : Rect2) -> bool:
-	if target.position.x >= bounds.position.x + bounds.size.x or bounds.position.x >= target.position.x + target.size.x:
-		return false
-	
-	if target.position.y >= bounds.position.y + bounds.size.y or bounds.position.y >= target.position.y + target.size.y:
-		return false
-		
-	return true
-
-func includes(target : Rect2) -> bool:
-	if target.position.x > bounds.position.x + bounds.size.x or target.position.x + target.size.x > bounds.position.x + bounds.size.x:
-		return false
-		
-	if target.position.y > bounds.position.y + bounds.size.y or target.position.y + target.size.y > bounds.position.y + bounds.size.y:
-		return false
-	
-	return true
-
-func inside(target : Rect2) -> bool:
-	if bounds.position.x >= target.position.x and bounds.position.x <= target.position.x + target.size.x:
-		if bounds.position.x + bounds.size.x <= target.position.x + target.size.x:
-			if bounds.position.y >= target.position.y and bounds.position.y <= target.position.y + target.size.x:
-				if bounds.position.y + bounds.size.y <= target.position.y + target.size.y:
-					return true
-	return false
-
 func insert_rect(target : Rect2, value : int):
-	if inside(target):
+	target.position.x = round(target.position.x)
+	target.position.y = round(target.position.y)
+	if target.encloses(bounds):
 		state = value
 		free_children()
-	elif overlaps(target):
+	elif bounds.intersects(target):
 		if state != -1:
 			split()
 		child_nw.insert_rect(target, value)
@@ -78,3 +54,18 @@ func insert_rect(target : Rect2, value : int):
 		if child_ne.state != -1 and child_ne.state == child_nw.state and child_ne.state == child_sw.state and child_ne.state == child_se.state:
 			state = child_ne.state
 			free_children()
+
+func state_at_point(point : Vector2) -> int:
+	if state != -1:
+		return state
+	elif child_nw.bounds.has_point(point):
+		return child_nw.state_at_point(point)
+	elif child_ne.bounds.has_point(point):
+		return child_ne.state_at_point(point)
+	elif child_sw.bounds.has_point(point):
+		return child_sw.state_at_point(point)
+	elif child_se.bounds.has_point(point):
+		return child_se.state_at_point(point)
+	else:
+		#print("No one has the point")
+		return -1

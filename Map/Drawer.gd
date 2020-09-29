@@ -1,7 +1,6 @@
 class_name Drawer
 extends Node2D
 
-
 var map : Map
 var mul = 8
 var limit = 2
@@ -64,6 +63,15 @@ func _draw():
 				draw_rect(Rect2(node.bounds.position * mul, node.bounds.size * mul), Color.black)
 			if debug_draw_tree:
 				draw_rect(Rect2(node.bounds.position * mul, node.bounds.size * mul), Color.crimson, false, 2)
+
+func draw_explosion_rect(point : Vector2, size : int):
+	var rect_size = Vector2(size, size)
+	var pos = (point / mul) - (rect_size / 2)
+	tree.insert_rect(Rect2(pos, rect_size), 0)
+	update()
+
+func is_point_blocked(point : Vector2) -> bool:
+	return tree.root.state_at_point(point/mul) == 1
 
 func _input(event):
 	if event.is_action("ui_accept"):
