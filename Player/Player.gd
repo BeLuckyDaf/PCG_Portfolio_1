@@ -5,6 +5,7 @@ signal on_player_died(id)
 
 onready var timer := $Timer
 onready var bullet = preload("res://Player/Bullet.tscn")
+onready var drawer : Drawer = get_tree().root.get_node_or_null("Main/Generator/Drawer")
 
 export var speed : float = 100
 export var player_id : int = 0
@@ -96,7 +97,17 @@ func shoot():
 
 func _process(delta):
 # warning-ignore:return_value_discarded
-	move_and_collide(move * delta * speed)
+	var velocity = move * delta * speed
+	var horizontal = velocity
+	var vertical = velocity
+	horizontal.y = 0
+	vertical.x = 0
+	if not drawer.is_point_blocked(position + velocity):
+		position += velocity
+	elif not drawer.is_point_blocked(position + horizontal):
+		position += horizontal
+	elif not drawer.is_point_blocked(position + vertical):
+		position += vertical
 	shoot()
 	update()
 

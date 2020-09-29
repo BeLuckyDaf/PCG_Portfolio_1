@@ -23,17 +23,14 @@ func _process(delta):
 		return
 	if direction.length() > 0:
 		var collision = move_and_collide(direction.normalized() * delta * speed)
-#		if collision is KinematicCollision2D and collision.collider is Node:
-#			if not collision.collider.is_in_group(group):
-#				if collision.collider.is_in_group("Destroyable"):
-#					collision.collider.destroy()
-#				else:
-#					collision.collider.call_deferred("queue_free")
+		if collision is KinematicCollision2D and collision.collider is Node:
+			if not collision.collider.is_in_group(group):
+				collision.collider.call_deferred("queue_free")
 		if drawer.is_point_blocked(position):
-			drawer.draw_explosion_rect(position, 8)
+			#drawer.draw_explosion_rect(position, 15)
+			drawer.draw_explosion_circle(position)
 			queue_free()
 	update()
-
 
 func _on_VisibilityNotifier2D_screen_exited():
 	queue_free()

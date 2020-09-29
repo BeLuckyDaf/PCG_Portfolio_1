@@ -8,6 +8,7 @@ var limit = 2
 var tree : QuadTree
 
 var debug_draw_tree : bool = false
+var debug_mouse_draw : bool = false
 
 onready var block := preload("res://Blocks/Block.tscn")
 
@@ -69,18 +70,30 @@ func draw_explosion_rect(point : Vector2, size : int):
 	var pos = (point / mul) - (rect_size / 2)
 	tree.insert_rect(Rect2(pos, rect_size), 0)
 	update()
+	
+func draw_explosion_circle(point : Vector2):
+	var rect_size = Vector2(5, 5)
+	var pos = (point / mul) - (rect_size / 2)
+	tree.insert_rect(Rect2(pos + Vector2(0, 2), Vector2(5, 1)), 0)
+	tree.insert_rect(Rect2(pos + Vector2(2, 0), Vector2(1, 5)), 0)
+	tree.insert_rect(Rect2(pos + Vector2(1, 1), Vector2(3, 3)), 0)
+	update()
 
 func is_point_blocked(point : Vector2) -> bool:
-	return tree.root.state_at_point(point/mul) == 1
+	return tree.state_at_point(point/mul) == 1
 
 func _input(event):
-	if event.is_action("ui_accept"):
-		var x = round(rand_range(0, 255))
-		var y = round(rand_range(0, 255))
-		tree.insert_rect(Rect2(Vector2(x, y), Vector2.ONE*15), 0)
-		update()
-	elif event.is_action_pressed("ui_select"):
+	if event.is_action_pressed("ui_select"):
 		debug_draw_tree = not debug_draw_tree
+		update()
+	elif event.is_action_pressed("click"):
+		debug_mouse_draw = true
+	elif event.is_action_released("click"):
+		debug_mouse_draw = false
+
+func _process(delta):
+	if debug_mouse_draw:
+		tree.insert_rect(Rect2((get_global_mouse_position()/mul)-Vector2.ONE * 5, Vector2.ONE * 10), 1)
 		update()
 
 func _on_Drawer_on_map_drawn(multiplier):
