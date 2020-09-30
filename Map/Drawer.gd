@@ -23,18 +23,18 @@ func fill_node(node: QuadTreeNode):
 				count += 1
 	if count > limit and count < (node.bounds.size.y * node.bounds.size.x) - limit: # then split
 		node.split()
-		fill_node(node.child_nw)
-		fill_node(node.child_ne)
-		fill_node(node.child_sw)
-		fill_node(node.child_se)
-		node.state = -1
+		fill_node(node.get_nw())
+		fill_node(node.get_ne())
+		fill_node(node.get_sw())
+		fill_node(node.get_se())
 	elif count < limit:
 		node.state = 0
 	else:
 		node.state = 1
 
 func generate_tree():
-	tree = QuadTree.new(Rect2(Vector2.ZERO, Vector2(map.width, map.height)))
+	tree = QuadTree.new()
+	tree.init_tree(Rect2(Vector2.ZERO, Vector2(map.width, map.height)))
 	fill_node(tree.root)
 
 func set_map(value, multiplier):
@@ -53,15 +53,16 @@ func _draw():
 		stack.push_back(tree.root)
 		while stack.size() > 0:
 			var node = stack.pop_back()
+			var bounds = node.bounds
 			if node.state == -1:
-				stack.push_back(node.child_nw)
-				stack.push_back(node.child_ne)
-				stack.push_back(node.child_sw)
-				stack.push_back(node.child_se)
+				stack.push_back(node.get_nw())
+				stack.push_back(node.get_ne())
+				stack.push_back(node.get_sw())
+				stack.push_back(node.get_se())
 			elif node.state == 1:
-				draw_rect(Rect2(node.bounds.position * mul, node.bounds.size * mul), Color.black)
+				draw_rect(Rect2(bounds.position * mul, bounds.size * mul), Color.black)
 			if debug_draw_tree:
-				draw_rect(Rect2(node.bounds.position * mul, node.bounds.size * mul), Color.crimson, false, 2)
+				draw_rect(Rect2(bounds.position * mul, bounds.size * mul), Color.crimson, false, 2)
 
 func draw_explosion_rect(point : Vector2, size : int):
 	var rect_size = Vector2(size, size)
@@ -91,7 +92,7 @@ func _input(event):
 
 func _process(delta):
 	if debug_mouse_draw:
-		tree.insert_rect(Rect2((get_global_mouse_position()/mul)-Vector2.ONE * 5, Vector2.ONE * 10), 1)
+		tree.insert_rect(Rect2((get_global_mouse_position()/mul)-Vector2.ONE * 15, Vector2.ONE * 30), 1)
 		update()
 
 func _on_Drawer_on_map_drawn(multiplier):

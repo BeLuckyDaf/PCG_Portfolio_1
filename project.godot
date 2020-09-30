@@ -33,25 +33,13 @@ _global_script_classes=[ {
 "class": "Player",
 "language": "GDScript",
 "path": "res://Player/Player.gd"
-}, {
-"base": "Reference",
-"class": "QuadTree",
-"language": "GDScript",
-"path": "res://QuadTree/quadtree.gd"
-}, {
-"base": "Reference",
-"class": "QuadTreeNode",
-"language": "GDScript",
-"path": "res://QuadTree/quadtree_node.gd"
 } ]
 _global_script_class_icons={
 "Bullet": "",
 "Drawer": "",
 "Generator": "",
 "Map": "",
-"Player": "",
-"QuadTree": "",
-"QuadTreeNode": ""
+"Player": ""
 }
 
 [application]

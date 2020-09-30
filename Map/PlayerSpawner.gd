@@ -17,9 +17,6 @@ func _input(event):
 			var mirrored_position = map_end - free_position
 			players_positions.append(free_position)
 			players_positions.append(mirrored_position)
-			print(free_position)
-			print(mirrored_position)
-			print(map_end)
 		if not alive[event.device]:
 			alive[event.device] = true
 			var player_instance = player.instance()
