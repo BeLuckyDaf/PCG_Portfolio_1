@@ -8,7 +8,7 @@ var limit = 2
 var tree : QuadTree
 
 var debug_draw_tree : bool = false
-var debug_mouse_draw : bool = false
+var debug_mouse_draw : int = 0
 
 signal on_map_updated(new_map)
 signal on_map_drawn(multiplier)
@@ -86,13 +86,18 @@ func _input(event):
 		debug_draw_tree = not debug_draw_tree
 		update()
 	elif event.is_action_pressed("click"):
-		debug_mouse_draw = true
-	elif event.is_action_released("click"):
-		debug_mouse_draw = false
+		debug_mouse_draw = 1
+	elif event.is_action_released("click") or event.is_action_released("right_click"):
+		debug_mouse_draw = 0
+	elif event.is_action_pressed("right_click"):
+		debug_mouse_draw = 2
 
 func _process(delta):
-	if debug_mouse_draw:
-		tree.insert_rect(Rect2((get_global_mouse_position()/mul)-Vector2.ONE * 15, Vector2.ONE * 30), 1)
+	if debug_mouse_draw == 1:
+		tree.insert_rect(Rect2((get_global_mouse_position()/mul)-Vector2.ONE * 8, Vector2.ONE * 16), 1)
+		update()
+	elif debug_mouse_draw == 2:
+		tree.insert_rect(Rect2((get_global_mouse_position()/mul)-Vector2.ONE * 8, Vector2.ONE * 16), 0)
 		update()
 
 func _on_Drawer_on_map_drawn(multiplier):
